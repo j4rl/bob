@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const back = document.getElementById("myBox");
     const bob = document.createElement("div");
+    const btn = document.querySelector(".start");
     const backWidth = 400;
     const backHeight = 600;
     const bobWidth = 60;
@@ -104,5 +105,11 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    main();
+    //Clearly a brainfart here, add an eventlistener to make the button go click
+    //otherwise remove the eventlistener to make button inert.
+    if (!boards.length) {
+        btn.addEventListener("click", main);
+    } else {
+        btn.removeEventListener("click", main);
+    }
 })
