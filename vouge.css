@@ -1,0 +1,56 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.grid {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    background: #ddd;
+    overflow: hidden;
+}
+
+.bob {
+    position: absolute;
+    width: 60px;
+    height: 85px;
+    background: rgb(123, 202, 123);
+}
+
+.platform {
+    position: absolute;
+    width: 85px;
+    height: 15px;
+    background: #d24;
+}
+
+div div {
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 50px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 3em;
+    text-align: center;
+    color: #222;
+    background: #ddd;
+}
+
+.start {
+    width: 400px;
+    height: 50px;
+    font-size: 2em;
+}
