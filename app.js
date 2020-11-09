@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
             let newBoardBottom = 100 + (counter * boardGap);
             let newBoard = new board(newBoardBottom); // Make new instance of board with parameter of newboardbottom
             boards.push(newBoard);
-            console.log(boards)
         }
     }
 

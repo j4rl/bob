@@ -1,3 +1,14 @@
+:root {
+    --width: 400px;
+    --height: 600px;
+    --bobH: 85px;
+    --bobW: 60px;
+    --backBG: #ddd;
+    --bobBG: #b4d455;
+    --boardBG: #d24;
+    --scoreColor: #333;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -11,24 +22,24 @@ body {
 
 .grid {
     position: relative;
-    width: 400px;
-    height: 600px;
-    background: #ddd;
+    width: var(--width);
+    height: var(--height);
+    background: var(--backBG);
     overflow: hidden;
 }
 
 .bob {
     position: absolute;
-    width: 60px;
-    height: 85px;
-    background: rgb(123, 202, 123);
+    width: var(--bobW);
+    height: var(--bobH);
+    background: var(--bobBG);
 }
 
 .platform {
     position: absolute;
     width: 85px;
     height: 15px;
-    background: #d24;
+    background: var(--boardBG);
 }
 
 div div {
@@ -40,17 +51,17 @@ div div {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 400px;
-    height: 50px;
+    width: var(--width);
+    height: calc(var(--width) / 8);
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 3em;
     text-align: center;
-    color: #222;
-    background: #ddd;
+    color: var(--scoreColor);
+    background: var(--backBG);
 }
 
 .start {
-    width: 400px;
-    height: 50px;
+    width: var(--width);
+    height: calc(var(--width) / 8);
     font-size: 2em;
 }
