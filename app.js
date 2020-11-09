@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let bobStartX = 150;
     let bobStartY = 150;
     let bobBottomSpace = bobStartY;
+    //check if we need to add more const or vars...
 
     function createBob() {
         back.appendChild(bob);
@@ -61,6 +62,35 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
         }
+    }
+
+    function fall() {
+        //Code to fall if we are clear of boards
+        //if we fall to bottom, game over
+    }
+
+    function jump() {
+        //code to jump
+    }
+
+    function moveLeft() {
+        //code to move left
+    }
+
+    function moveRight() {
+        //same as above but to the right
+    }
+
+    function moveStraight() {
+        //if not left or right
+    }
+
+    function gameOver() {
+        //reset interval timers and display score, maybe do a cleanup?
+    }
+
+    function control(e) {
+        //control of the keys and tie it to the movement functions
     }
 
 
