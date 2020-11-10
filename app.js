@@ -15,7 +15,19 @@ document.addEventListener("DOMContentLoaded", function() {
     let GameOver = false;
     let bobStartX = 150;
     let bobStartY = 150;
-    let bobBottomSpace = bobStartY;
+    let bobLeft=bobStartY;
+    let boardHeight=15;
+    let boardWidth=85;
+    let bobBottomSpace = bobStartX;
+    let isJumping=false;
+    let isGoingLeft=false;
+    let isGoingRight=false;
+    let bobJumpSpeed=backHeight/FPS;
+    //Timers
+    let upTimer;
+    let downTimer;
+    let rightTimer;
+    let leftTimer;
     //check if we need to add more const or vars...
 
     function createBob() {
@@ -68,10 +80,41 @@ document.addEventListener("DOMContentLoaded", function() {
     function fall() {
         //Code to fall if we are clear of boards
         //if we fall to bottom, game over
+        isJumping=false;
+        clearInterval(upTimer);
+        downTimer=setInterval(function(){
+            bobBottomSpace-=boardSpeed+gravity;
+            bob.style.bottom=bobBottomSpace+'px';
+            if(bobBottomSpace<=0){
+                gameOver();
+            };
+            boards.forEach(function (currBoard){
+                if(
+                    bobBottomSpace>=currBoard.bottom && //Are we above board bottom? 
+                    bobBottomSpace<=currBoard.bottom+boardHeight &&//Are we inside the board
+                    bobLeft+bobWidth>=board.left && //ARe we outside to the left?
+                    bobLeft<=board.left+board.width && //Are we out to the right?
+                    !isJumping
+                ){
+                    jump();
+                    isJumping=true;
+                }
+            });
+        },FPS);
     }
 
     function jump() {
         //code to jump
+        clearInterval(downTimer);
+        isJumping=true;
+        upTimer=setInterval(function(){
+            bobBottomSpace+=bobJumpSpeed;
+            bob.style.bottom=bobBottomSpace+'px';
+            if(bobBottomSpace>bobStartY+200){
+                fall();
+                isJumping=false;
+            }
+        }, FPS);
     }
 
     function moveLeft() {
@@ -106,8 +149,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     //Clearly a brainfart here, add an eventlistener to make the button go click
-    //otherwise remove the eventlistener to make button inert.
-    if (!boards.length) {
+    //when game is over otherwise remove the eventlistener to make button inert.
+    if (GameOver) {
         btn.addEventListener("click", main);
     } else {
         btn.removeEventListener("click", main);
