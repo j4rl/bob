@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const back = document.getElementById("myBox");
     const bob = document.createElement("div");
     const btn = document.querySelector(".start");
+    const scoreBoard=document.querySelector(".score");
     const backWidth = 400;
     const backHeight = 600;
     const bobWidth = 60;
@@ -61,19 +62,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function moveBoards() {
         if (bobBottomSpace > 200) {
-            boards.forEach((arrObj) => { //Do NOT use the word board here, it WILL fuck shit up
-                arrObj.bottom -= boardSpeed;
-                let visual = arrObj.visual;
-                visual.style.bottom = arrObj.bottom + 'px';
-                if (arrObj.bottom < 5) {
-                    let firstBoard = boards[0].visual;
-                    firstBoard.remove();
-                    boards.shift();
-                    score++;
-                    let myBoard = new board(backHeight);
-                    boards.push(myBoard);
-                }
-            });
+            boards.forEach(function (arrObj) {
+                    arrObj.bottom -= boardSpeed;
+                    let visual = arrObj.visual;
+                    visual.style.bottom = arrObj.bottom + 'px';
+                    if (arrObj.bottom < 5) {
+                        let firstBoard = boards[0].visual;
+                        firstBoard.remove();
+                        boards.shift();
+                        score++;
+                        scoreBoard.innerHTML=score;
+                        let myBoard = new board(backHeight);
+                        boards.push(myBoard);
+                    }
+                });
         }
     }
 
@@ -83,19 +85,20 @@ document.addEventListener("DOMContentLoaded", function() {
         isJumping=false;
         clearInterval(upTimer);
         downTimer=setInterval(function(){
-            bobBottomSpace-=boardSpeed+gravity;
+            bobBottomSpace -= (boardSpeed+gravity);
             bob.style.bottom=bobBottomSpace+'px';
-            if(bobBottomSpace<=0){
+            if(bobBottomSpace <= 0){
                 gameOver();
             };
             boards.forEach(function (currBoard){
                 if(
-                    (bobBottomSpace >= currBoard.bottom) && //Are we above board bottom? 
-                    (bobBottomSpace <= (currBoard.bottom+boardHeight)) &&//Are we inside the board
-                    ((bobLeft+bobWidth) >= board.left) && //ARe we outside to the left?
-                    (bobLeft <= (board.left+board.width)) && //Are we out to the right?
+                    (bobBottomSpace >= currBoard.bottom) && 
+                    (bobBottomSpace <= (currBoard.bottom+boardHeight)) &&
+                    ((bobLeft+bobWidth) >= board.left) && 
+                    (bobLeft <= (board.left+board.width)) && 
                     !isJumping
                 ){
+                    bobStartY=bobBottomSpace;
                     jump();
                     isJumping=true;
                 }
@@ -103,14 +106,27 @@ document.addEventListener("DOMContentLoaded", function() {
         },FPS);
     }
 
+    function hit(arrItem){
+        if(
+            (bobBottomSpace >= currBoard.bottom) && 
+            (bobBottomSpace <= (currBoard.bottom+boardHeight)) &&
+            ((bobLeft+bobWidth) >= board.left) && 
+            (bobLeft <= (board.left+board.width)) && 
+            !isJumping
+        ){
+
+        }
+
+    }
+
     function jump() {
         //code to jump
         clearInterval(downTimer);
         isJumping=true;
         upTimer=setInterval(function(){
-            bobBottomSpace+=bobJumpSpeed;
+            bobBottomSpace += bobJumpSpeed;
             bob.style.bottom=bobBottomSpace+'px';
-            if(bobBottomSpace>bobStartY+200){
+            if(bobBottomSpace > 400){
                 fall();
                 isJumping=false;
             }
@@ -126,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isGoingLeft=true;
         leftTimer=setInterval(function(){
             if(bobLeft>=0){
-                bobLeft -= 5;
+                bobLeft -= boardSpeed;
                 bob.style.left=bobLeft+'px';
             }else{
                 moveRight();
@@ -143,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isGoingRight=true;
         rightTimer=setInterval(function(){
             if(bobLeft<=backWidth-bobWidth){
-                bobLeft += 5;
+                bobLeft += boardSpeed;
                 bob.style.left=bobLeft+'px';
             }else{
                 moveLeft();
@@ -192,15 +208,11 @@ document.addEventListener("DOMContentLoaded", function() {
             setInterval(moveBoards, FPS);
             jump();
             document.addEventListener('keyup', control);
+        }else{
+            gameOver();
         }
     }
     main();
 
-    //Clearly a brainfart here, add an eventlistener to make the button go click
-    //when game is over otherwise remove the eventlistener to make button inert.
-    if (GameOver) {
-        btn.addEventListener("click", main);
-    } else {
-        btn.removeEventListener("click", main);
-    }
+
 })
