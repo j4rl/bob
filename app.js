@@ -9,13 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const bobHeight = 85;
     const numBoards = 5;
     const boardSpeed = 4;
-    const boardSideSpeed = 5;
-    const FPS = 30;
+    const boardSideSpeed = 6;
+    const FPS = 25;
     const gravity = 1;
     let boards = [];
     let score = 0;
     let GameOver = false;
-    let Started = false;
+    //let Started = false;
     let bobStartX = 150;
     let bobStartY = 150;
     let bobLeft = bobStartY;
@@ -132,13 +132,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function moveLeft() {
         //code to move left
-        if (isGoingRight) {
-            clearInterval(rightTimer);
-            clearInterval(leftTimer);
-            isGoingRight = false;
-            isGoingLeft = true;
-        }
+        clearInterval(rightTimer);
+        clearInterval(leftTimer);
+        isGoingRight = false;
         isGoingLeft = true;
+
         leftTimer = setInterval(function() {
             if (bobLeft >= 0) {
                 bobLeft -= boardSideSpeed;
@@ -151,13 +149,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function moveRight() {
         //same as above but to the right
-        if (isGoingLeft) {
-            clearInterval(leftTimer);
-            clearInterval(rightTimer);
-            isGoingLeft = false;
-            isGoingRight = true;
-        }
+
+        clearInterval(leftTimer);
+        clearInterval(rightTimer);
+        isGoingLeft = false;
         isGoingRight = true;
+
         rightTimer = setInterval(function() {
             if (bobLeft <= backWidth - bobWidth) {
                 bobLeft += boardSideSpeed;
@@ -170,10 +167,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function moveStraight() {
         //if not left or right
-        isGoingLeft = false;
-        isGoingRight = false;
         clearInterval(leftTimer);
         clearInterval(rightTimer);
+        isGoingLeft = false;
+        isGoingRight = false;
     }
 
     function gameOver() {
@@ -225,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
             createBob();
             setInterval(moveBoards, FPS);
             jump(bobStartY);
-            document.addEventListener('keyup', control);
+            document.addEventListener('keydown', control);
         } else {
             gameOver();
         }
