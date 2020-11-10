@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const back = document.getElementById("myBox");
     const bob = document.createElement("div");
     const btn = document.querySelector(".start");
-    const scoreBoard=document.querySelector(".score");
+    const scoreBoard = document.querySelector(".score");
     const backWidth = 400;
     const backHeight = 600;
     const bobWidth = 60;
@@ -16,14 +16,14 @@ document.addEventListener("DOMContentLoaded", function() {
     let GameOver = false;
     let bobStartX = 150;
     let bobStartY = 150;
-    let bobLeft=bobStartY;
-    let boardHeight=15;
-    let boardWidth=85;
+    let bobLeft = bobStartY;
+    let boardHeight = 15;
+    let boardWidth = 85;
     let bobBottomSpace = bobStartX;
-    let isJumping=false;
-    let isGoingLeft=false;
-    let isGoingRight=false;
-    let bobJumpSpeed=backHeight/FPS;
+    let isJumping = false;
+    let isGoingLeft = false;
+    let isGoingRight = false;
+    let bobJumpSpeed = backHeight / FPS;
     //Timers
     let upTimer;
     let downTimer;
@@ -62,142 +62,155 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function moveBoards() {
         if (bobBottomSpace > 200) {
-            boards.forEach(function (arrObj) {
-                    arrObj.bottom -= boardSpeed;
-                    let visual = arrObj.visual;
-                    visual.style.bottom = arrObj.bottom + 'px';
-                    if (arrObj.bottom < 5) {
-                        let firstBoard = boards[0].visual;
-                        firstBoard.remove();
-                        boards.shift();
-                        score++;
-                        scoreBoard.innerHTML=score;
-                        let myBoard = new board(backHeight);
-                        boards.push(myBoard);
-                    }
-                });
+            boards.forEach(function(arrObj) {
+                arrObj.bottom -= boardSpeed;
+                let visual = arrObj.visual;
+                visual.style.bottom = arrObj.bottom + 'px';
+                if (arrObj.bottom < 5) {
+                    let firstBoard = boards[0].visual;
+                    firstBoard.remove();
+                    boards.shift();
+                    score++;
+                    scoreBoard.innerHTML = score;
+                    let myBoard = new board(backHeight);
+                    boards.push(myBoard);
+                }
+            });
         }
     }
 
     function fall() {
         //Code to fall if we are clear of boards
         //if we fall to bottom, game over
-        isJumping=false;
+        isJumping = false;
         clearInterval(upTimer);
-        downTimer=setInterval(function(){
-            bobBottomSpace -= (boardSpeed+gravity);
-            bob.style.bottom=bobBottomSpace+'px';
-            if(bobBottomSpace <= 0){
+        downTimer = setInterval(function() {
+            bobBottomSpace -= (boardSpeed + gravity);
+            bob.style.bottom = bobBottomSpace + 'px';
+            if (bobBottomSpace <= 0) {
                 gameOver();
             };
-            boards.forEach(function (currBoard){
-                if(
-                    (bobBottomSpace >= currBoard.bottom) && 
-                    (bobBottomSpace <= (currBoard.bottom+boardHeight)) &&
-                    ((bobLeft+bobWidth) >= board.left) && 
-                    (bobLeft <= (board.left+board.width)) && 
-                    !isJumping
-                ){
-                    bobStartY=bobBottomSpace;
+            boards.forEach((currBoard) => {
+                if (hit(currBoard)) {
+                    console.log(hit(currBoard));
+                    bobStartY = bobBottomSpace;
                     jump();
-                    isJumping=true;
+                    isJumping = true;
                 }
             });
-        },FPS);
+        }, FPS);
     }
 
-    function hit(arrItem){
-        if(
-            (bobBottomSpace >= currBoard.bottom) && 
-            (bobBottomSpace <= (currBoard.bottom+boardHeight)) &&
-            ((bobLeft+bobWidth) >= board.left) && 
-            (bobLeft <= (board.left+board.width)) && 
+    function hit(arrItem) {
+        if (
+            (bobBottomSpace >= arrItem.bottom) &&
+            (bobBottomSpace <= (arrItem.bottom + boardHeight)) &&
+            ((bobLeft + bobWidth) >= arrItem.left) &&
+            (bobLeft <= (arrItem.left + arrItem.width)) &&
             !isJumping
-        ){
-
+        ) {
+            return true;
+        } else {
+            return false;
         }
-
     }
 
     function jump() {
         //code to jump
         clearInterval(downTimer);
-        isJumping=true;
-        upTimer=setInterval(function(){
+        isJumping = true;
+        upTimer = setInterval(function() {
             bobBottomSpace += bobJumpSpeed;
-            bob.style.bottom=bobBottomSpace+'px';
-            if(bobBottomSpace > 400){
+            bob.style.bottom = bobBottomSpace + 'px';
+            if (bobBottomSpace > bobStartY + 200) {
                 fall();
-                isJumping=false;
+                isJumping = false;
             }
         }, FPS);
     }
 
     function moveLeft() {
         //code to move left
-        if(isGoingRight){
+        if (isGoingRight) {
             clearInterval(rightTimer);
-            isGoingRight=false;
+            clearInterval(leftTimer);
+            isGoingRight = false;
+            isGoingLeft = true;
         }
-        isGoingLeft=true;
-        leftTimer=setInterval(function(){
-            if(bobLeft>=0){
+        isGoingLeft = true;
+        leftTimer = setInterval(function() {
+            if (bobLeft >= 0) {
                 bobLeft -= boardSpeed;
-                bob.style.left=bobLeft+'px';
-            }else{
+                bob.style.left = bobLeft + 'px';
+            } else {
                 moveRight();
             }
-        },FPS);
+        }, FPS);
     }
 
     function moveRight() {
         //same as above but to the right
-        if(isGoingLeft){
+        if (isGoingLeft) {
             clearInterval(leftTimer);
-            isGoingLeft=false;
+            clearInterval(rightTimer);
+            isGoingLeft = false;
+            isGoingRight = true;
         }
-        isGoingRight=true;
-        rightTimer=setInterval(function(){
-            if(bobLeft<=backWidth-bobWidth){
+        isGoingRight = true;
+        rightTimer = setInterval(function() {
+            if (bobLeft <= backWidth - bobWidth) {
                 bobLeft += boardSpeed;
-                bob.style.left=bobLeft+'px';
-            }else{
+                bob.style.left = bobLeft + 'px';
+            } else {
                 moveLeft();
             }
-        },FPS);    
+        }, FPS);
     }
 
     function moveStraight() {
         //if not left or right
-        isGoingLeft=false;
-        isGoingRight=false;
+        isGoingLeft = false;
+        isGoingRight = false;
         clearInterval(leftTimer);
         clearInterval(rightTimer);
     }
 
     function gameOver() {
         //reset interval timers and display score, maybe do a cleanup?
-        GameOver=true;
+        GameOver = true;
         clearInterval(upTimer);
         clearInterval(downTimer);
         clearInterval(rightTimer);
         clearInterval(leftTimer);
-        document.querySelector('.score').innerHTML=score;
-        while(back.firstChild){
+        document.querySelector('.score').innerHTML = score;
+        while (back.firstChild) {
             back.removeChild(back.firstChild);
         };
     }
 
     function control(e) {
         //control of the keys and tie it to the movement functions
-        bob.style.bottom=bobBottomSpace+'px';
-        if(e.key === "ArrowLeft"){
-            moveLeft();
-        }else if(e.key==="ArrowRight"){
-            moveRight();
-        }else if(e.key==="ArrowUp"){
-            moveStraight();
+        bob.style.bottom = bobBottomSpace + 'px';
+        switch (e.key) {
+            case "ArrowLeft":
+                moveLeft();
+                break;
+            case "ArrowRight":
+                moveRight();
+                break;
+            case "ArrowUp":
+                moveStraight();
+                break;
+            default:
+                break;
         }
+        // if (e.key === "ArrowLeft") {
+        //     moveLeft();
+        // } else if (e.key === "ArrowRight") {
+        //     moveRight();
+        // } else if (e.key === "ArrowUp") {
+        //     moveStraight();
+        // }
     }
 
 
@@ -206,9 +219,9 @@ document.addEventListener("DOMContentLoaded", function() {
             createBoards();
             createBob();
             setInterval(moveBoards, FPS);
-            jump();
+            jump(bobStartY);
             document.addEventListener('keyup', control);
-        }else{
+        } else {
             gameOver();
         }
     }
