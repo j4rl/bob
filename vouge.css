@@ -3,9 +3,10 @@
     --height: 600px;
     --bobH: 85px;
     --bobW: 60px;
-    --backBG: #ddd;
-    --bobBG: #b4d455;
-    --boardBG: #d24;
+    --backBG: linear-gradient(0deg, rgba(87, 119, 138, 1) 0%, rgba(188, 215, 221, 1) 58%, rgba(255, 255, 255, 1) 89%, rgba(221, 221, 221, 1) 100%);
+    ;
+    --bobBG: url(lander.gif);
+    --boardBG: url(board.png);
     --scoreColor: #333;
 }
 
@@ -28,7 +29,7 @@ body {
     overflow: hidden;
     font-size: 3em;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    color: var(--boardBG);
+    color: #d24;
 }
 
 .bob {
@@ -45,10 +46,11 @@ body {
     background: var(--boardBG);
 }
 
-div div {
+
+/* div div {
     border: 2px solid black;
     border-radius: 5px;
-}
+} */
 
 .score {
     display: flex;
@@ -60,7 +62,7 @@ div div {
     font-size: 3em;
     text-align: center;
     color: var(--scoreColor);
-    background: var(--backBG);
+    background: #ddd;
 }
 
 .start {
