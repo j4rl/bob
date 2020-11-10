@@ -90,10 +90,10 @@ document.addEventListener("DOMContentLoaded", function() {
             };
             boards.forEach(function (currBoard){
                 if(
-                    bobBottomSpace>=currBoard.bottom && //Are we above board bottom? 
-                    bobBottomSpace<=currBoard.bottom+boardHeight &&//Are we inside the board
-                    bobLeft+bobWidth>=board.left && //ARe we outside to the left?
-                    bobLeft<=board.left+board.width && //Are we out to the right?
+                    (bobBottomSpace >= currBoard.bottom) && //Are we above board bottom? 
+                    (bobBottomSpace <= (currBoard.bottom+boardHeight)) &&//Are we inside the board
+                    ((bobLeft+bobWidth) >= board.left) && //ARe we outside to the left?
+                    (bobLeft <= (board.left+board.width)) && //Are we out to the right?
                     !isJumping
                 ){
                     jump();
@@ -119,22 +119,69 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function moveLeft() {
         //code to move left
+        if(isGoingRight){
+            clearInterval(rightTimer);
+            isGoingRight=false;
+        }
+        isGoingLeft=true;
+        leftTimer=setInterval(function(){
+            if(bobLeft>=0){
+                bobLeft -= 5;
+                bob.style.left=bobLeft+'px';
+            }else{
+                moveRight();
+            }
+        },FPS);
     }
 
     function moveRight() {
         //same as above but to the right
+        if(isGoingLeft){
+            clearInterval(leftTimer);
+            isGoingLeft=false;
+        }
+        isGoingRight=true;
+        rightTimer=setInterval(function(){
+            if(bobLeft<=backWidth-bobWidth){
+                bobLeft += 5;
+                bob.style.left=bobLeft+'px';
+            }else{
+                moveLeft();
+            }
+        },FPS);    
     }
 
     function moveStraight() {
         //if not left or right
+        isGoingLeft=false;
+        isGoingRight=false;
+        clearInterval(leftTimer);
+        clearInterval(rightTimer);
     }
 
     function gameOver() {
         //reset interval timers and display score, maybe do a cleanup?
+        GameOver=true;
+        clearInterval(upTimer);
+        clearInterval(downTimer);
+        clearInterval(rightTimer);
+        clearInterval(leftTimer);
+        document.querySelector('.score').innerHTML=score;
+        while(back.firstChild){
+            back.removeChild(back.firstChild);
+        };
     }
 
     function control(e) {
         //control of the keys and tie it to the movement functions
+        bob.style.bottom=bobBottomSpace+'px';
+        if(e.key === "ArrowLeft"){
+            moveLeft();
+        }else if(e.key==="ArrowRight"){
+            moveRight();
+        }else if(e.key==="ArrowUp"){
+            moveStraight();
+        }
     }
 
 
@@ -143,10 +190,11 @@ document.addEventListener("DOMContentLoaded", function() {
             createBoards();
             createBob();
             setInterval(moveBoards, FPS);
-        } else {
-
+            jump();
+            document.addEventListener('keyup', control);
         }
     }
+    main();
 
     //Clearly a brainfart here, add an eventlistener to make the button go click
     //when game is over otherwise remove the eventlistener to make button inert.
