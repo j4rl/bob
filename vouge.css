@@ -26,6 +26,9 @@ body {
     height: var(--height);
     background: var(--backBG);
     overflow: hidden;
+    font-size: 3em;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: var(--boardBG);
 }
 
 .bob {

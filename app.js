@@ -9,11 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const bobHeight = 85;
     const numBoards = 5;
     const boardSpeed = 4;
+    const boardSideSpeed = 5;
     const FPS = 30;
     const gravity = 1;
     let boards = [];
     let score = 0;
     let GameOver = false;
+    let Started = false;
     let bobStartX = 150;
     let bobStartY = 150;
     let bobLeft = bobStartY;
@@ -92,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function() {
             };
             boards.forEach((currBoard) => {
                 if (hit(currBoard)) {
-                    console.log(hit(currBoard));
                     bobStartY = bobBottomSpace;
                     jump();
                     isJumping = true;
@@ -106,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
             (bobBottomSpace >= arrItem.bottom) &&
             (bobBottomSpace <= (arrItem.bottom + boardHeight)) &&
             ((bobLeft + bobWidth) >= arrItem.left) &&
-            (bobLeft <= (arrItem.left + arrItem.width)) &&
+            (bobLeft <= (arrItem.left + boardWidth)) &&
             !isJumping
         ) {
             return true;
@@ -140,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isGoingLeft = true;
         leftTimer = setInterval(function() {
             if (bobLeft >= 0) {
-                bobLeft -= boardSpeed;
+                bobLeft -= boardSideSpeed;
                 bob.style.left = bobLeft + 'px';
             } else {
                 moveRight();
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function() {
         isGoingRight = true;
         rightTimer = setInterval(function() {
             if (bobLeft <= backWidth - bobWidth) {
-                bobLeft += boardSpeed;
+                bobLeft += boardSideSpeed;
                 bob.style.left = bobLeft + 'px';
             } else {
                 moveLeft();
@@ -186,6 +187,10 @@ document.addEventListener("DOMContentLoaded", function() {
         while (back.firstChild) {
             back.removeChild(back.firstChild);
         };
+        back.style.display = "flex";
+        back.style.justifyContent = "center";
+        back.style.alignItems = "center";
+        back.innerHTML = "Game Over!";
     }
 
     function control(e) {
@@ -226,6 +231,5 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
     main();
-
 
 })
