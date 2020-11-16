@@ -137,14 +137,14 @@ document.addEventListener("DOMContentLoaded", function() {
         isGoingRight = false;
         isGoingLeft = true;
 
-        leftTimer = setInterval(function() {
+       // leftTimer = setInterval(function() {
             if (bobLeft >= 0) {
                 bobLeft -= boardSideSpeed;
                 bob.style.left = bobLeft + 'px';
             } else {
                 moveRight();
             }
-        }, FPS);
+       // }, FPS);
     }
 
     function moveRight() {
@@ -155,14 +155,14 @@ document.addEventListener("DOMContentLoaded", function() {
         isGoingLeft = false;
         isGoingRight = true;
 
-        rightTimer = setInterval(function() {
+       // rightTimer = setInterval(function() {
             if (bobLeft <= backWidth - bobWidth) {
                 bobLeft += boardSideSpeed;
                 bob.style.left = bobLeft + 'px';
             } else {
                 moveLeft();
             }
-        }, FPS);
+       // }, FPS);
     }
 
     function moveStraight() {
